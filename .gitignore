@@ -1,0 +1,16 @@
+.env
+.env.local
+/main
+/api
+/bin/
+/tmp/
+
+*.test
+*.out
+coverage.txt
+
+.idea/
+.vscode/
+*.swp
+.DS_Store
+vendor/**

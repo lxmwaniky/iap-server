@@ -1,0 +1,10 @@
+.git
+.agents
+.codex
+.env
+.env.*
+api
+main
+tmp/
+review.md
+docs/

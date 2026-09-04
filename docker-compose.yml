@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: iap_user
+      POSTGRES_PASSWORD: iap_password
+      POSTGRES_DB: iap_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - iap_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iap_user -d iap_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  iap_postgres_data:
+
