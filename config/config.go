@@ -8,8 +8,24 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
+	"time"	
 )
+
+type Config struct {
+	Env                   string
+	Port                  string
+	DatabaseURL           string
+	GooglePlayPackageName string
+	AuthMode              string
+	AnonymousTokenSecret  string
+	AnonymousTokenTTL     time.Duration
+	AuthJWTSecret         string
+	RequireAPIKey         bool
+	AppAPIKey             string
+	RTDNVerificationToken string
+	AllowedOrigins        string
+	TrustedProxyCIDRs     []string
+}
 
 func LoadEnv(filenames ...string) error {
 	filename := ".env"
@@ -41,22 +57,6 @@ func LoadEnv(filenames ...string) error {
 		return fmt.Errorf("failed to scan env file: %w", err)
 	}
 	return nil
-}
-
-type Config struct {
-	Env                   string
-	Port                  string
-	DatabaseURL           string
-	GooglePlayPackageName string
-	AuthMode              string
-	AnonymousTokenSecret  string
-	AnonymousTokenTTL     time.Duration
-	AuthJWTSecret         string
-	RequireAPIKey         bool
-	AppAPIKey             string
-	RTDNVerificationToken string
-	AllowedOrigins        string
-	TrustedProxyCIDRs     []string
 }
 
 func LoadConfig() (*Config, error) {
@@ -109,13 +109,6 @@ func LoadConfig() (*Config, error) {
 	return cfg, nil
 }
 
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
-}
-
 func buildDatabaseURL(user, password, host, port, name string) string {
 	u := &url.URL{
 		Scheme: "postgres",
@@ -127,6 +120,13 @@ func buildDatabaseURL(user, password, host, port, name string) string {
 	q.Set("sslmode", "disable")
 	u.RawQuery = q.Encode()
 	return u.String()
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
 func splitCSV(value string) []string {
